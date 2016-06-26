@@ -1,6 +1,6 @@
 module.exports = {
   entry: [
-    './todo/index.js'
+    './concept/index.js'
   ],
   output: {
     filename: "bundle.js",
