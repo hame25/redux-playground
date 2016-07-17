@@ -1,14 +1,14 @@
 import React, { PropTypes } from 'react';
 
-const ProgressBarItem = ({onClick, id}) => {
+const ProgressBarItem = ({clickHandler, id, active}) => {
 
   return (
-    <li onClick={onClick}>{id}</li>
+    <li onClick={() => clickHandler(id)} className={active ? 'active' : 'inactive'}>{id}</li>
   )
 }
 
 ProgressBarItem.PropTypes = {
-  onClick: PropTypes.func.isRequired,
+  clickHandler: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired
 };
 

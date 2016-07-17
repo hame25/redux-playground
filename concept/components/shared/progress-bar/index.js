@@ -1,4 +1,5 @@
 import React from 'react';
+import ProgressBarItem from '../progress-bar-item';
 
 const ProgressBar = ({active, onProgressItemClick}) =>{
   const progressItems = [1, 2, 3, 4];
@@ -6,7 +7,7 @@ const ProgressBar = ({active, onProgressItemClick}) =>{
     <div className='progress-bar'>
       <ul>
         {progressItems.map(item =>
-          <li key={item} onClick={() => onProgressItemClick(item)} className={active === item ? 'active' : 'inactive'}>{item}</li>
+          <ProgressBarItem  key={item} id={item} clickHandler={onProgressItemClick} active={active === item ? true : false}/>
         )}
       </ul>
     </div>
