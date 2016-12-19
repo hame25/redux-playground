@@ -1,4 +1,6 @@
 import express from 'express';
+import { join as joinPath } from 'path';
+import { compileFile } from 'pug';
 import { match, RouterContext} from 'react-router';
 import React from 'react';
 import ReactDOMServer from'react-dom/server';
@@ -13,6 +15,11 @@ import progressReducer from './reducers';
 const port = 1982;
 
 let app = new express();
+
+app.use(express.static(joinPath(__dirname, 'public')))
+
+let layoutPath = joinPath(__dirname, './layout/layout.jade');
+let layout = compileFile(layoutPath);
 
 app.get("/", function(req, res) {
   res.sendFile(__dirname + '/index.html')
@@ -40,12 +47,15 @@ app.all("*", (req, res) => {
           </App>
         </Provider>
       );
-      console.log('html', html);
-      res.send(html);
+
+      const templateLocals = {
+        content: html,
+        data: data
+      }
+
+      res.send(layout(templateLocals));
     //});
   });
-
-  //res.send('hello world');
 });
 
 
