@@ -5,12 +5,13 @@ import { match, RouterContext} from 'react-router';
 import React from 'react';
 import ReactDOMServer from'react-dom/server';
 import createRoutes from './routes';
-import fetchData from './utils/fetch-data';
+//import fetchData from './utils/fetch-data';
 import createMemoryHistory from 'history/createMemoryHistory';
 import { Provider } from 'react-redux';
-import { createStore } from 'redux'
+import { createStore, applyMiddleware } from 'redux'
 import App from './components/app';
 import progressReducer from './reducers';
+import thunkMiddleware from 'redux-thunk';
 
 const port = 1982;
 
@@ -30,20 +31,27 @@ app.all("*", (req, res) => {
   const history = createMemoryHistory(req.url);
   const routes = createRoutes(history);
 
-  const store = createStore(progressReducer);
-
   match({ routes, location: req.originalUrl }, (err, redirectLocation, renderProps) => {
 
-    //fetchData(renderProps).then((data) => {
-      
-      /*res.locals.props = {
-        ...data
-      };*/
-      const data = {};
+    const components = renderProps.components;
+    const Component = components[components.length - 1].WrappedComponent;
+    console.log('component', Component);
+
+    const store = createStore(
+      progressReducer,
+      applyMiddleware(thunkMiddleware)
+    )
+
+    Component.fetchData({store}).then((data) => {
+
+      function createElement(Component, props) {
+        return <Component {...props} {...data} />
+      }
+
       const html = ReactDOMServer.renderToString(
         <Provider store={store}>
           <App>
-            <RouterContext {...renderProps} data={data}/>
+            <RouterContext {...renderProps} data={data} createElement={createElement}/>
           </App>
         </Provider>
       );
@@ -54,7 +62,7 @@ app.all("*", (req, res) => {
       }
 
       res.send(layout(templateLocals));
-    //});
+    });
   });
 });
 

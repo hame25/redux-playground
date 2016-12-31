@@ -10,11 +10,13 @@ const basket = {
   items: [
     {
       id: "001",
-      name: "Beans"
+      name: "Beans",
+      price: 0.89
     },
     {
       id: "002",
-      name: "Bread"
+      name: "Bread",
+      price: 1.23
     }
   ],
   delivery: {
