@@ -11,22 +11,25 @@ export const fetchBasket = () => {
   
   return (dispatch, getState) => {
 
-    const products = [
-    {
-      id: '001',
-      name: 'Product 1',
-      price: 1.99
-    },
-    {
-      id: '002',
-      name: 'Product 2',
-      price: 2.50
-    }
-  ];
+    const products = {
+      products:[
+        {
+          id: '001',
+          name: 'Product 1',
+          price: 1.99
+        },
+        {
+          id: '002',
+          name: 'Product 2',
+          price: 2.50
+        }
+      ]
+    };
 
-    return dispatch({
-      type: RECIEVE_BASKET,
-      products: products
-    })
+    return Promise.resolve(products).then(res => {
+      dispatch({ type: RECIEVE_BASKET, products: res.products })
+      return res;
+    });
   }
 }
+

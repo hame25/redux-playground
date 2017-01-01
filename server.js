@@ -35,7 +35,6 @@ app.all("*", (req, res) => {
 
     const components = renderProps.components;
     const Component = components[components.length - 1].WrappedComponent;
-    console.log('component', Component);
 
     const store = createStore(
       progressReducer,
