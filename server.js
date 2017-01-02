@@ -13,6 +13,8 @@ import App from './components/app';
 import progressReducer from './reducers';
 import thunkMiddleware from 'redux-thunk';
 
+import { fetchBasket } from './actions';
+
 const port = 1982;
 
 let app = new express();
@@ -41,23 +43,23 @@ app.all("*", (req, res) => {
       applyMiddleware(thunkMiddleware)
     )
 
-    Component.fetchData({store}).then((data) => {
+    Promise.all([Component.fetchData({store}), fetchGlobalData({store})]).then(([pageData, globalData]) => {
 
       function createElement(Component, props) {
-        return <Component {...props} {...data} />
+        return <Component {...props} {...pageData} {...globalData} />
       }
 
       const html = ReactDOMServer.renderToString(
         <Provider store={store}>
           <App>
-            <RouterContext {...renderProps} data={data} createElement={createElement}/>
+            <RouterContext {...renderProps} createElement={createElement}/>
           </App>
         </Provider>
       );
 
       const templateLocals = {
         content: html,
-        data: data
+        data: Object.assign({}, pageData, globalData)
       }
 
       res.send(layout(templateLocals));
@@ -65,7 +67,9 @@ app.all("*", (req, res) => {
   });
 });
 
-
+function fetchGlobalData ({store}) {
+  return store.dispatch(fetchBasket());
+}
 
 app.use('/src', express.static(__dirname + '/public'));
 

@@ -21,7 +21,8 @@ class BasketPage extends React.Component {
   }
 
   static fetchData ({store}) {
-    return store.dispatch(fetchBasket());
+    //return store.dispatch(fetchBasket());
+    return Promise.resolve({});
   }
 
   renderProductList () {
