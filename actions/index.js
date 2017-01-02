@@ -33,3 +33,15 @@ export const fetchBasket = () => {
   }
 }
 
+export const updateTitle = (title) => {
+
+  return (dispatch, getState) => {
+    dispatch({
+      type: "UPDATE_TITLE",
+      title: title
+    });
+
+    return {title};
+  }
+};
+

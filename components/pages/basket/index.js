@@ -1,28 +1,26 @@
 import React from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';  
-import { fetchBasket } from '../../../actions'
+import { updateTitle } from '../../../actions'
 import ProductList from '../../product-list';
 
-const mapStateToProps = ({products}) => ({ 
-  products: products
+const mapStateToProps = ({products, title}) => ({ 
+  products,
+  title
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  fetchBasket: () => dispatch(fetchBasket())
-})
+  updateTitle: (title) => dispatch(updateTitle(title))
+});
 
 class BasketPage extends React.Component {
 
   componentDidMount () {
-    if (!this.props.products) {
-      this.props.fetchBasket();
-    }
+    this.props.updateTitle('Basket')
   }
 
   static fetchData ({store}) {
-    //return store.dispatch(fetchBasket());
-    return Promise.resolve({});
+    return store.dispatch(updateTitle('Basket'));
   }
 
   renderProductList () {
@@ -36,7 +34,7 @@ class BasketPage extends React.Component {
   render () {  
     return (
       <div>
-        <h1>{'Basket Page'}</h1>
+        <h1>{this.props.title}</h1>
         <p>{'My basket page'}</p>
         <Link to='/order-summary'>{'Summary'}</Link>
         { this.renderProductList() }

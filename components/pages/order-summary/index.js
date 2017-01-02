@@ -1,17 +1,31 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { connect } from 'react-redux' 
+import { connect } from 'react-redux';
+import { updateTitle } from '../../../actions';
+
+const mapStateToProps = ({products, title}) => ({ 
+  products,
+  title
+});
+
+const mapDispatchToProps = (dispatch) => ({
+  updateTitle: (title) => dispatch(updateTitle(title))
+}); 
 
 class SummaryPage extends React.Component {
 
-  static fetchData () {
-    return Promise.resolve({});
+  componentDidMount () {
+    this.props.updateTitle('Order Summary');
+  }
+
+  static fetchData ({store}) {
+    return store.dispatch(updateTitle('Order Summary'));
   }
 
   render () {
     return (
       <div>
-        <h1>{'Summary Page'}</h1>
+        <h1>{this.props.title}</h1>
         <p>{'My summary page'}</p>
         <Link to='/basket'>{'Basket'}</Link>
       </div>
@@ -19,4 +33,4 @@ class SummaryPage extends React.Component {
   }
 }
 
-export default connect()(SummaryPage);
+export default connect(mapStateToProps, mapDispatchToProps)(SummaryPage);
