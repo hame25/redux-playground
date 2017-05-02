@@ -1,2 +1,2 @@
 # redux-playground
-Playground for redux
+Playground for redux.
